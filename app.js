@@ -43,17 +43,15 @@ addMushroomButton.addEventListener('click', () => {
 addFriendButton.addEventListener('click', () => {
     // get the name from the input
     const nameInput = friendInputEl.value;
-    // create a new friend object
-    if (name !== '') {
-        let newFriend = {
-            name: nameInput,
-            satisfaction: 1
-        };
-    } else {
-        let newFriend = {
-            name: `friend #${Math.floor(Math.random() * 1024)}`,
+    let newFriend = {
+        name: '',
         satisfaction: 1
-        };
+    };
+    // create a new friend object
+    if (nameInput !== '') {
+        newFriend.name = nameInput;
+    } else {
+        newFriend.name = `friend #${Math.floor(Math.random() * 1024)}`;
     }
     // push it into the friends state array, passed in as an argument
     friendData.push(newFriend);
@@ -65,19 +63,29 @@ addFriendButton.addEventListener('click', () => {
 
 function displayFriends() {
     // clear out the friends in DOM
-
+    friendsEl.textContent() = '';
     // for each friend in state . . .
     for (let friend of friendData) {
         // use renderFriend to make a friendEl
-
+        const friendsListEl = renderFriend(friend);
         // this is a clickable list, so . . .
         //     add an event listener to each friend
+        friendsListEl.addEventListener('click', () => {
         //         and if the friend's satisfaction level is below 3 and you have mushrooms left
         //             increment the friends satisfaction and decrement your mushrooms
         //             then display your friends and mushrooms with the updated state
+            if (mushroomCount === 0) {
+                alert('Insufficient mushrooms.  Build more pylons!');
+            } else if (mushroomCount > 0 && friend.satisfaction < 3) {
+                friend.satisfaction++;
+                mushroomCount--;
+
+                displayFriends();
+                displayMushrooms();
+            }
 
         // append the friendEl to the friends list in DOM
-    }
+    });
 }
 
 function displayMushrooms() {
@@ -90,3 +98,4 @@ function displayMushrooms() {
 
 displayFriends();
 displayMushrooms();
+}
