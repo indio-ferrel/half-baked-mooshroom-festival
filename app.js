@@ -42,23 +42,19 @@ addMushroomButton.addEventListener('click', () => {
 
 addFriendButton.addEventListener('click', () => {
     // get the name from the input
-    const nameInput = friendInputEl.value;
-    let newFriend = {
-        name: '',
+    
+    // create a new friend object
+    const newFriend = {
+        name: friendInputEl.value || `friend ${Math.floor(Math.random() * 1024)}`,
         satisfaction: 1
     };
-    // create a new friend object
-    if (nameInput !== '') {
-        newFriend.name = nameInput;
-    } else {
-        newFriend.name = `friend #${Math.floor(Math.random() * 1024)}`;
-    }
+    
     // push it into the friends state array, passed in as an argument
     friendData.push(newFriend);
     // reset the input
     friendInputEl.value = '';
     // display all the friends (use a function here)
-    displayFriends;
+    displayFriends();
 });
 
 function displayFriends() {
@@ -67,15 +63,15 @@ function displayFriends() {
     // for each friend in state . . .
     for (let friend of friendData) {
         // use renderFriend to make a friendEl
-        const friendsListEl = renderFriend(friend);
+        const friendEl = renderFriend(friend);
         // this is a clickable list, so . . .
-        //     add an event listener to each friend
-        friendsListEl.addEventListener('click', () => {
-        //         and if the friend's satisfaction level is below 3 and you have mushrooms left
-        //             increment the friends satisfaction and decrement your mushrooms
-        //             then display your friends and mushrooms with the updated state
+        //    add an event listener to each friend
+        friendsEl.addEventListener('click', () => {
+        //    and if the friend's satisfaction level is below 3 and you have mushrooms left
+        //    increment the friends satisfaction and decrement your mushrooms
+        //    then display your friends and mushrooms with the updated state
             if (mushroomCount === 0) {
-                alert('Insufficient mushrooms.  Build more pylons!');
+                alert('Insufficient mushrooms.');
             } else if (mushroomCount > 0 && friend.satisfaction < 3) {
                 friend.satisfaction++;
                 mushroomCount--;
